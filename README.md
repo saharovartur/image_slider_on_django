@@ -6,7 +6,7 @@ Backend: Django: 4.1, Python: 3.9;
 База данных: MySQL;
 Frontend: HTML/CSS/JS, Boxicons, slick, Bootstrap5.
 
-*Изначально был установлен Django 4.1, в ходе разработки при установки django-filer версия Django была обновлена до версии из req.txt. 
+*Изначально был установлен Django 4.1, в ходе разработки при установке django-filer версия Django была обновлена до версии из req.txt. 
 
 ## Описание функциональности
 
