@@ -2,8 +2,8 @@
 
 ## Технологии:
 
-Backend: Django: 4.1, Python: 3.9, 
-База данных: MySQL,
+Backend: Django: 4.1, Python: 3.9; 
+База данных: MySQL;
 Frontend: HTML/CSS/JS, Boxicons, slick, Bootstrap5.
 
 ## Описание функциональности
