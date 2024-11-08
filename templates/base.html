@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru-ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <! -- css, boxicons, slick-css -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+
+</head>
+
+<! -- Шапка Bootstrap -->
+<body class="d-flex flex-column min-vh-100">
+    <header class="bg-dark text-white py-3">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">
+                        <i class='bx bxs-rocket bx-tada-hover'></i> Космос
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <button type="button" class="btn btn-danger">Вход</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    {% block content %}{% endblock %}
+
+
+<! -- Контент (список изображений) -->
+<main>
+    <h1 class="section-title">Космос</h1>
+
+    <div class="slider-container">
+        <div class="slider-for">
+            {% for image in images %}
+                <div class="slide">
+                    <img src="{{ image.img.url }}" alt="{{ image.title }}">
+                </div>
+            {% endfor %}
+        </div>
+        <div class="slider-nav">
+            {% for image in images %}
+                <div class="slide">
+                    <img src="{{ image.img.url }}" alt="{{ image.title }}">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <button class="modal-prev">&#10094;</button>
+        <button class="modal-next">&#10095;</button>
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="">
+        </div>
+    </div>
+</main>
+
+
+<! --js, jquery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+
+
+<! -- Настройки slider -->
+<script>
+$(document).ready(function(){
+    $('.slider-for').slick({
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: true,
+        fade: true,
+        asNavFor: '.slider-nav'
+    });
+
+    $('.slider-nav').slick({
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        asNavFor: '.slider-for',
+        dots: false,
+        centerMode: true,
+        focusOnSelect: true,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1
+                }
+            }
+        ]
+    });
+
+    let modal = document.getElementById("imageModal");
+    let modalImg = document.getElementById("modalImage");
+    let span = document.getElementsByClassName("close")[0];
+    let currentImageIndex = 0;
+    let images = $('.slider-for .slide img').map(function() {
+        return {
+            src: this.src,
+            alt: this.alt
+        };
+    }).get();
+
+
+
+    $('.slider-for .slide img').click(function(){
+        modal.style.display = "block";
+        currentImageIndex = $('.slider-for .slide img').index(this);
+        updateModalImage();
+    });
+
+    $('.modal-prev').click(function() {
+        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+        updateModalImage();
+    });
+
+    $('.modal-next').click(function() {
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        updateModalImage();
+    });
+
+    function updateModalImage() {
+        modalImg.src = images[currentImageIndex].src;
+        modalImg.alt = images[currentImageIndex].alt;
+    }
+
+    $(document).keydown(function(e) {
+        if (modal.style.display === "block") {
+            if (e.keyCode === 37) { // Left arrow
+                $('.modal-prev').click();
+            } else if (e.keyCode === 39) { // Right arrow
+                $('.modal-next').click();
+            } else if (e.keyCode === 27) { // Esc key
+                modal.style.display = "none";
+            }
+        }
+    });
+
+
+
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+});
+</script>
+</body>
+</html>
