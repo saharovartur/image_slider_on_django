@@ -7,7 +7,7 @@ from nasa import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('base', include('images.urls')),
+    path('base/', include('images.urls')),
 ]
 
 if settings.DEBUG:
